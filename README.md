@@ -19,7 +19,7 @@ PrestaShop Localizer (psy_localizer) is a module that adapts PrestaShop for Pers
 ## Requirements
 
 - PrestaShop 8.1.0 or higher
-- PHP 7.4 or higher
+- PHP 8.1 or higher
 
 ## Installation
 
