@@ -1,0 +1,306 @@
+#wsdk-panel {
+	display: flex;
+	flex-direction: column;
+	padding: 0 !important;
+	border-radius: 0 !important;
+	width: 100%;
+}
+#wsdk-panel-header {
+	display: flex;
+	width: 100%;
+	flex-direction: column;
+}
+.wsdk-panel-content {
+	display: flex;
+	flex: 1;
+	gap: 16px; 
+}
+.wsdk-panel-sidebar {
+	flex: 0 1 auto;
+	max-width: 300px;
+	overflow: auto;
+}
+.wsdk-panel-main {
+	flex: 1;
+	overflow: auto;
+}
+
+/* ---------------------------------------------------------- */
+#wsdk-panel .wsdk-panel-main .panel{
+	border: none !important;
+	box-shadow: none;
+}
+#wsdk-panel a:focus {
+	outline: none;
+}
+#wsdk-panel .panel .panel-heading{
+	font-size: 18px !important;
+	height: 60px !important;
+	line-height: 40px;
+	padding:10px;
+	text-transform: lowercase;
+	text-transform: full-size-kana;
+	background: #f4f4f4;
+	margin:-20px -20px 20px;
+}
+#wsdk-panel .panel .panel-heading i {
+	font-size: 18px;
+}
+#wsdk-panel .panel .nav-tabs{
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+#wsdk-panel .panel .nav-tabs li a {
+	text-transform: none;
+	border-radius: 0;
+	line-height: 40px;
+	padding: 10px 30px;
+	font-size: 16px;
+	font-weight: normal;
+	border-top: none;
+}
+#wsdk-panel .panel .nav-tabs > li:not(.active) > a:hover {
+	background: #f4f4f4;
+}
+#wsdk-panel .panel-heading .panel-heading-action a.list-toolbar-btn{
+	width: 50px;
+	padding: 10px;
+	border-left: none;
+}
+#wsdk-panel label.control-label {
+	font-size: 14px;
+}
+#wsdk-panel .help-block {
+	font-size: 13px;
+}
+#wsdk-panel > .panel-footer {
+	background-color: #e5e5e5;
+	border: 1px solid #c5c5c5;
+	color: #222;
+}
+
+/*
+ * menu sidebar
+*/
+.wsdk-panel-menu{
+    background: #fafafa;
+    margin-bottom: 10px;
+}
+.wsdk-panel-menu .list-group-item {
+	padding: 0;
+	transition: all .5s ease-out;
+}
+.wsdk-panel-menu .list-group-item > a:hover,
+.wsdk-panel-menu .list-group-item > a:focus,
+.wsdk-panel-menu .list-group-item ul li:hover > a,
+.wsdk-panel-menu .list-group-item ul li:focus > a{
+	color: #555;
+	background-color: #f5f5f5;
+}
+.wsdk-panel-menu .list-group-item.disabled {
+	padding: 10px 15px;
+}
+.wsdk-panel-menu .list-group-item a{
+	padding: 8px 10px;
+	display: flex;
+	color: #555;
+	font-size: 14px;
+	align-items: center;
+	gap: 10px;
+	line-height: 25px;
+}
+.wsdk-panel-menu .list-group-item a:focus,
+.wsdk-panel-menu .list-group-item a:hover{
+	text-decoration: none;
+}
+.wsdk-panel-menu .list-group-item a.active,
+.wsdk-panel-menu .list-group-item a.active:hover,
+.wsdk-panel-menu .list-group-item a.active:focus {
+	z-index: 2;
+	color: #fff;
+	background-color: #00aff0;
+	border-color: #00aff0;
+}
+.wsdk-panel-menu .list-group-item a i[class^="icon-"] {
+	font-size: 22px;
+	line-height: 25px;
+}
+.wsdk-panel-menu .list-group-item .grower{
+	display: block;
+	background: #bbb;
+	position: absolute;
+	right:0;
+	top: 0;
+	cursor: pointer;
+	font-family: "FontAwesome";
+	font-size: 14px;
+}
+.wsdk-panel-menu .list-group-item .grower.open {
+	background: #E9E9E9;
+}
+.wsdk-panel-menu .list-group-item .grower.active {
+	background: #00aff0;
+}
+.wsdk-panel-menu .list-group-item .grower:before {
+	display: block;
+	vertical-align: middle;
+	width: 56px;
+	height: 56px;
+	line-height: 56px;
+	color: #333;
+	text-align: center;
+}
+.wsdk-panel-menu .list-group-item .grower.close:before {
+	content: "\f067";
+}
+.wsdk-panel-menu .list-group-item .grower.open::before{
+	content: "\f068";
+}
+.wsdk-panel-menu .list-group-item ul {
+	padding: 0;
+	margin: 0;
+	display: none;
+	list-style: none;
+}
+.wsdk-panel-menu .list-group-item ul.open {
+	display: block;
+}
+.wsdk-panel-menu .list-group-item ul li {
+	padding: 0;
+	border-top: 1px solid #ddd;
+}
+.wsdk-panel-menu .list-group-item ul li a {
+	padding-left: 40px;
+}
+.wsdk-panel-menu .list-group-item a > span {
+	padding-left: 50px;
+}
+
+.wsdk-menu {
+	cursor: pointer;
+}
+.wsdk-menu-collapse {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3px 8px;
+    position: relative;
+	background-color: #fff;
+	margin-bottom: 10px;
+}
+.wsdk-menu-collapse-arrow {
+	display: flex;
+	gap: 3px;
+    transition: transform 0.3s ease;
+}
+.wsdk-menu-collapse-arrow .material-icons:last-child {
+	margin-right: -21.008px;
+	margin-right: -1.313rem;
+}
+.wsdk-menu.wsdk-menu-closed .wsdk-menu-collapse-arrow {
+    transform: rotate(180deg);
+}
+.wsdk-menu.wsdk-menu-closed .wsdk-menu-version {
+    display: none;
+}
+.wsdk-menu-closed .list-group-item ul,
+.wsdk-menu-closed .list-group-item .grower{
+    display: none !important;
+}
+.wsdk-menu-closed .list-group-item a {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.wsdk-menu-closed .list-group-item a span {
+	display: none;
+	transition: all .5s ease-out;
+}
+
+.wsdk-menu-version {
+	display: none;
+}
+.wsdk-menu-collapse {
+	justify-content: end;
+	padding: 0;
+	margin-bottom: 0;
+	background-color: transparent;
+}
+
+#wsdk-info {
+    display: flex;
+    margin-bottom: 10px;
+    background: #ffffff;
+	color: #464646 !important;
+	border: 1px solid #fafafa;
+}
+a#wsdk-info:hover {
+	text-decoration: none;
+	background-color: #f5f5f5;
+	border-color: #ddd;
+}
+.wsdk-info__logo img {
+    width: 40px;
+    height: 40px;
+    padding: 5px;
+}
+.wsdk-info__title{
+    display: flex;
+	align-items: center;
+}
+.wsdk-info__name h4{
+    margin-top: 0;
+    margin-bottom: 3px;
+	padding: 0 .25rem;
+	font-size: .825rem;
+}
+.wsdk-info__name .badge {
+    padding: 0 .25rem;
+    font-size: .525rem;
+}
+.wsdk-info__name .badge.badge-info {
+    background-color: #474747;
+}
+.wsdk-info-closed .wsdk-info__name{
+	display: none;
+}
+
+#wsdk-info.wsdk-info--update{
+	background: #fbbb22;
+	color: #785500 !important;
+	border-color: #fbbb22;
+}
+
+
+/* rtl */
+html[lang="fa"] #wsdk-panel #wsdk-module-content .panel,
+body.lang-rtl #wsdk-panel #wsdk-module-content .panel {
+	font-family: inherit;
+}
+html[lang="fa"] #wsdk-panel .panel .nav-tabs,
+body.lang-rtl #wsdk-panel .panel .nav-tabs{
+	left: 0;
+	right: auto;
+}
+
+html[lang="fa"] .wsdk-panel-menu .list-group-item .grower,
+body.lang-rtl .wsdk-panel-menu .list-group-item .grower{
+	left:0;
+	right: auto;
+}
+html[lang="fa"] .wsdk-panel-menu .list-group-item ul li a,
+body.lang-rtl .wsdk-panel-menu .list-group-item ul li a {
+	padding-right: 40px;
+	padding-left: 10px;
+}
+
+span.ltr,
+textarea.ltr,
+input[type="text"].ltr {
+	display: inline-block;
+	direction: ltr;
+}
+.suffix-ltr .input-group-addon{
+	direction: ltr;
+}

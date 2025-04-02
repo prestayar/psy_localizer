@@ -1,0 +1,25 @@
+.order-navigation-right .btn > .material-icons,
+.order-navigation-left .btn > .material-icons{
+    transform: rotate(180deg);
+}
+
+.material-choice-tree-container ul.choice-tree .collapsed > .checkbox::before,
+.material-choice-tree-container ul.choice-tree .collapsed > .radio::before {
+    transform: rotate(180deg);
+}
+
+.mce-window{
+    right: auto;
+}
+
+.action-type .dropdown-menu.show{
+    right: auto;
+}
+
+#psy-panel .form-wrapper{
+    max-width: 100% !important;
+}
+
+div.code-toolbar, div.code-toolbar * {
+    direction: ltr !important;
+}

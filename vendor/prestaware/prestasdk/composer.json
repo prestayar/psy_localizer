@@ -1,0 +1,19 @@
+{
+    "name": "prestaware/prestasdk",
+    "description": "Prestashop Module Development Kit",
+    "version": "0.2.3",
+    "authors": [
+        {
+            "name": "PrestaWare",
+            "email": "info@prestaware.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "PrestaSDK\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.4.0"
+    }
+}
