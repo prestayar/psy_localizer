@@ -7,8 +7,8 @@
  * @copyright (c) 2025 - PrestaYar Team
  * @website https://prestayar.com
  */
-use PrestaSDK\Utility\Config;
-use PrestaSDK\Utility\HelperForm;
+use PrestaSDK\V040\Utility\Config;
+use PrestaSDK\V040\Utility\HelperForm;
 use PrestaYar\Localizer\LocalizerAdmin;
 use PrestaYar\Localizer\Native\NativeCorePrestashop;
 use PrestaYar\Localizer\Native\StyleSheetFont;

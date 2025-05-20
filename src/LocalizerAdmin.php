@@ -13,7 +13,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use PrestaSDK\Controller\AdminController;
+use PrestaSDK\V040\Controller\AdminController;
 use PrestaYar\Localizer\Traits\UseInfoModule;
 
 class LocalizerAdmin extends AdminController

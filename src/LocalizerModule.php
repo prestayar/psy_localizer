@@ -13,7 +13,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use PrestaSDK\PrestaSDKModule;
+use PrestaSDK\V040\PrestaSDKModule;
 use PrestaYar\Localizer\Native\NativeCorePrestashop;
 use PrestaYar\Localizer\Traits\UseDate;
 
