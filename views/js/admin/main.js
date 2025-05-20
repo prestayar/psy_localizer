@@ -88,6 +88,11 @@ function initdatePickers() {
                 timePicker: $timePicker,
                 onSelect: function(unix){
                     $(picker).parents(".column-filters").find(".grid-search-button").prop("disabled", !1);
+                },
+                calendar:{
+                    persian: {
+                        leapYearMode: 'astronomical'
+                    }
                 }
             });
         });
