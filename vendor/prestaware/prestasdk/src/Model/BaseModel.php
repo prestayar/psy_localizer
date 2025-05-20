@@ -7,7 +7,7 @@
  * @website    https://prestaware.com
  * @license    https://www.gnu.org/licenses/gpl-3.0.html [GNU General Public License]
  */
-namespace PrestaSDK\Model;
+namespace PrestaSDK\V040\Model;
 
 abstract class BaseModel extends \ObjectModel
 {

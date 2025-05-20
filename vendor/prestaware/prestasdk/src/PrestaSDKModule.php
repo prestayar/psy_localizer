@@ -7,33 +7,79 @@
  * @website    https://prestaware.com
  * @license    https://www.gnu.org/licenses/gpl-3.0.html [GNU General Public License]
  */
-namespace PrestaSDK;
+namespace PrestaSDK\V040;
 
-use PrestaSDK\Install\HooksInstaller;
-use PrestaSDK\Install\TablesInstaller;
-use PrestaSDK\Install\TabsInstaller;
-use PrestaSDK\Utility\AssetPublisher;
-use PrestaSDK\Utility\Config;
-use PrestaSDK\Utility\VersionHelper;
+use PrestaSDK\V040\Install\HooksInstaller;
+use PrestaSDK\V040\Install\TablesInstaller;
+use PrestaSDK\V040\Install\TabsInstaller;
+use PrestaSDK\V040\Utility\AssetPublisher;
+use PrestaSDK\V040\Utility\Config;
+use PrestaSDK\V040\Utility\VersionHelper;
 
+/**
+ * Base class for PrestaShop module development
+ * Extends the core PrestaShop Module class with additional functionality
+ */
 class PrestaSDKModule extends \Module
 {
+    /**
+     * @var array List of admin tabs to be installed with the module
+     */
     public array $moduleTabs;
+    
+    /**
+     * @var array List of configuration values for the module
+     */
     public array $moduleConfigs;
+    
+    /**
+     * @var string Prefix for configuration keys in the database
+     */
     public string $perfixConfigs = '';
 
+    /**
+     * @var string Main admin controller for module configuration
+     */
     public string $configsAdminController;
+    
+    /**
+     * @var string Parent tab for module tabs in the admin panel
+     */
     public string $moduleGrandParentTab = '';
 
+    /**
+     * @var string Path to SQL installation file
+     */
     public string $pathFileSqlInstall;
+    
+    /**
+     * @var string Path to SQL uninstallation file
+     */
     public string $pathFileSqlUninstall;
 
+    /**
+     * @var string Query parameter name for section navigation
+     */
     public $sectionQueryKey = 'section';
+    
+    /**
+     * @var string Default section to display if none specified
+     */
     public $sectionDefault = 'index';
+    
+    /**
+     * @var string|null Force a specific section to be displayed
+     */
     public $sectionForce;
 
+    /**
+     * @var Config Configuration utility instance
+     */
     public Config $config;
 
+    /**
+     * Constructor initializes the module with default settings
+     */
     public function __construct()
     {
         $this->context = \Context::getContext();
@@ -41,13 +87,20 @@ class PrestaSDKModule extends \Module
         $this->bootstrap = true;
 
         $this->ps_versions_compliancy = ['min' => '8.1.0', 'max' => _PS_VERSION_];
-
+		
+		// Initialize moduleConfigs if not set
+        if (!isset($this->moduleConfigs)) {
+            $this->moduleConfigs = [];
+        }
+        
+        // Call initModule before parent constructor but after basic initialization
         if (method_exists($this,'initModule')) {
             $this->initModule();
         }
 
         $this->config = new Config($this->moduleConfigs, $this->perfixConfigs);
 
+        // Call parent constructor after all properties are initialized
         parent::__construct();
 
         if (empty($this->pathFileSqlInstall)) {
@@ -60,8 +113,11 @@ class PrestaSDKModule extends \Module
     }
 
     /**
+     * Installs the module, including tabs, hooks, tables, and configurations
+     * 
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
+     * @return bool Success status of installation
      */
     public function install(): bool
     {
@@ -96,8 +152,11 @@ class PrestaSDKModule extends \Module
     }
 
     /**
+     * Uninstalls the module, removing tabs, tables, and configurations
+     * 
      * @throws \PrestaShopDatabaseException
      * @throws \PrestaShopException
+     * @return bool Success status of uninstallation
      */
     public function uninstall(): bool
     {
@@ -119,7 +178,11 @@ class PrestaSDKModule extends \Module
     }
 
     /**
+     * Handles module configuration page access
+     * Redirects to the appropriate admin controller
+     * 
      * @throws \Exception
+     * @return string|void HTML content or redirect
      */
     public function getContent()
     {
@@ -135,9 +198,9 @@ class PrestaSDKModule extends \Module
     }
 
     /**
-     * Get Prestashop Base Path
-     *
-     * @return string
+     * Gets the PrestaShop base file system path
+     * 
+     * @return string Base path with trailing directory separator
      */
     public function getPsBasePath()
     {
@@ -145,11 +208,10 @@ class PrestaSDKModule extends \Module
     }
 
     /**
-     * Get This Module Path
-     *
-     * @param null $extraPath
-     *
-     * @return string
+     * Gets the module's file system path
+     * 
+     * @param null|string $extraPath Additional path to append
+     * @return string Complete module path
      */
     public function getModulePath($extraPath = null)
     {
@@ -160,6 +222,11 @@ class PrestaSDKModule extends \Module
         return $path;
     }
 
+    /**
+     * Gets the PrestaShop base URL
+     * 
+     * @return bool|string Base URL with protocol based on SSL settings
+     */
     public function getPsBaseUrl(): bool|string
     {
         $auto_secure_mode = \Configuration::get('PS_SSL_ENABLED');
@@ -167,11 +234,10 @@ class PrestaSDKModule extends \Module
     }
 
     /**
-     * Get This Module Url
-     *
-     * @param null $extraPath
-     *
-     * @return string
+     * Gets the module's URL
+     * 
+     * @param null|string $extraPath Additional path to append
+     * @return string Complete module URL
      */
     public function getModuleUrl($extraPath = null): string
     {
@@ -183,7 +249,12 @@ class PrestaSDKModule extends \Module
     }
 
     /**
-     * getModuleAdminLink
+     * Generates an admin link for the module
+     * 
+     * @param string $controller Admin controller name
+     * @param array|string $params Additional parameters or section name
+     * @param bool $withToken Whether to include security token
+     * @return string Complete admin URL
      */
     public function getModuleAdminLink($controller, $params = [], $withToken = true): string
     {
@@ -195,9 +266,9 @@ class PrestaSDKModule extends \Module
     }
 
     /**
-     * helper method for get use reques section=? value
-     *
-     * @return string
+     * Gets the current section from request parameters
+     * 
+     * @return string Current section name
      */
     public function getRequestSection()
     {
@@ -214,6 +285,12 @@ class PrestaSDKModule extends \Module
         return $section;
     }
 
+    /**
+     * Gets a configuration value
+     * 
+     * @param string $config Configuration key
+     * @return mixed Configuration value
+     */
     public function getFromConfigs($config)
 	{
 		if (empty($this->config)) {
@@ -224,13 +301,11 @@ class PrestaSDKModule extends \Module
     }
 
     /**
-     * fetch and return Template
-     *
-     * @param $tplPath
-     * @param array $vars
-     *
-     * @return false|string
-     *
+     * Fetches and renders a template file
+     * 
+     * @param string $tplPath Full path to template file
+     * @param array $vars Variables to assign to the template
+     * @return false|string Rendered template content
      * @throws \SmartyException
      */
     public function fetchTemplate($tplPath, array $vars = [])
@@ -246,7 +321,14 @@ class PrestaSDKModule extends \Module
         return $this->context->smarty->fetch($tplPath);
     }
 
-    public function renderModuleTemplate( $tpl,array $vars = [] )
+    /**
+     * Renders a module template file from the standard template directory
+     * 
+     * @param string $tpl Template path relative to views/templates/
+     * @param array $vars Variables to assign to the template
+     * @return false|string Rendered template content
+     */
+    public function renderModuleTemplate($tpl, array $vars = [])
     {
         $tpl = ltrim($tpl, '\/');
         $tplPath = $this->getModulePath() . 'views/templates/' . $tpl;

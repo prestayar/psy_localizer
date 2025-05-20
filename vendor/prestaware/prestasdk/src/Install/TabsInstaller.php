@@ -9,7 +9,7 @@
  */
 declare(strict_types=1);
 
-namespace PrestaSDK\Install;
+namespace PrestaSDK\V040\Install;
 
 use Doctrine\ORM\Query\Expr\Func;
 
@@ -89,7 +89,7 @@ class TabsInstaller
         $tab->icon = isset($tabItem['icon']) ? $tabItem['icon'] : '';
         $tab->active = !empty($tabItem['visible']);
         $tab->enabled = 1;
-        $tab->module = $this->module->name;
+        $tab->module = ($tabItem['class_name'] === $this->module->moduleGrandParentTab) ? '' :$this->module->name;
         $tab->name = [];
 
         $languages = \Language::getLanguages(false);
@@ -135,17 +135,34 @@ class TabsInstaller
     {
         $tabs = [];
 
+        // add parent configsAdminController
+        /* $addGrandParentTab = false;
         if (count($tabsModules) > 1) {
             if (!empty($this->module->configsAdminController) && isset($tabsModules[$this->module->configsAdminController])) {
                 $tab = $this->getDefaultValueTab($this->module->configsAdminController. 'Parent', $tabsModules[$this->module->configsAdminController]);
     
+                foreach ($tabsModules as $key => $item) {
+                    if ($key == $this->module->moduleGrandParentTab) {
+                        $tabs[] = $this->getDefaultValueTab($key, $item);
+                        $addGrandParentTab = true;
+                        break;
+                    }
+                }
+
                 $tabs[] = array_merge(
                     $tab, [
                         'parent_class_name' => $this->module->moduleGrandParentTab,
                     ]
                 );
             }
+        } 
+
+        foreach ($tabsModules as $key => $item) {
+            if (!$addGrandParentTab || $key !== $this->module->moduleGrandParentTab) {
+                $tabs[] = $this->getDefaultValueTab($key, $item);
+            }
         }
+        */
 
         foreach ($tabsModules as $key => $item) {
             $tabs[] = $this->getDefaultValueTab($key, $item);
@@ -164,7 +181,14 @@ class TabsInstaller
             return $this->module->moduleGrandParentTab;
         }
 
-        return $this->module->configsAdminController . 'Parent';
+        if ($key == $this->module->configsAdminController) {
+            return $this->module->moduleGrandParentTab;
+        }
+
+        return '';
+
+        // add parent configsAdminController
+        // return $this->module->configsAdminController . 'Parent';
     }
 
     public function getWordingDomain()

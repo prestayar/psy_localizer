@@ -9,7 +9,7 @@
  */
 declare(strict_types=1);
 
-namespace PrestaSDK\Install;
+namespace PrestaSDK\V040\Install;
 
 use PrestaShopBundle\Install\SqlLoader;
 

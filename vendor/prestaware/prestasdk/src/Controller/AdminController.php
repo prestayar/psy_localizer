@@ -9,14 +9,14 @@
  */
 declare(strict_types=1);
 
-namespace PrestaSDK\Controller;
+namespace PrestaSDK\V040\Controller;
 
-use PrestaSDK\Utility\AssetPublisher;
-use PrestaSDK\Utility\VersionHelper;
+use PrestaSDK\V040\Utility\AssetPublisher;
+use PrestaSDK\V040\Utility\VersionHelper;
 
 abstract class AdminController extends \ModuleAdminController
 {
-    use \PrestaSDK\Utility\PanelCore;
+    use \PrestaSDK\V040\Utility\PanelCore;
 
     public $model = null;
 
@@ -184,5 +184,9 @@ abstract class AdminController extends \ModuleAdminController
     protected function getFromConfigs(string $string)
     {
         return $this->module->getFromConfigs($string);
+    }
+
+    public function displayListAction($params) {
+        return $this->renderPanelTemplate('_partials/helpers/list/list_action.tpl', $params);
     }
 }

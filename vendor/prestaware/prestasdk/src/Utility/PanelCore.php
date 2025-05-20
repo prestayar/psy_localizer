@@ -7,7 +7,7 @@
  * @website    https://prestaware.com
  * @license    https://www.gnu.org/licenses/gpl-3.0.html [GNU General Public License]
  */
-namespace PrestaSDK\Utility;
+namespace PrestaSDK\V040\Utility;
 
 trait PanelCore
 {
@@ -22,7 +22,7 @@ trait PanelCore
     public $panelLayout = 'layout.tpl';
     public $prestaSDKPath = 'vendor/prestaware/prestasdk/src';
 
-    public function initSDKPanel(): void
+    public function initSDKPanel()
     {
         $vars = [
             '_content' => $this->requestRunner(),
