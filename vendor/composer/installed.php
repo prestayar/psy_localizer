@@ -3,7 +3,7 @@
         'name' => 'prestayar/localizer',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'f1054a193ac2fd94f52636f86805cd846d32d3fc',
+        'reference' => '684027c1f5ac3cd2e8f2e77cabc7dc3f843fc95e',
         'type' => 'prestashop-module',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -58,7 +58,7 @@
         'prestayar/localizer' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'f1054a193ac2fd94f52636f86805cd846d32d3fc',
+            'reference' => '684027c1f5ac3cd2e8f2e77cabc7dc3f843fc95e',
             'type' => 'prestashop-module',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
