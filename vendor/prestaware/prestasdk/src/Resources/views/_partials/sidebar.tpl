@@ -7,23 +7,17 @@
  * @license    https://www.gnu.org/licenses/gpl-3.0.html [GNU General Public License]
  *}
 
+{assign var='sidebarOrientation' value=$sidebar_orientation|default:'horizontal'}
+
 {if isset($menuItems)}
-<div class="wsdk-menu {$active_section}">
-	<div class="wsdk-menu-collapse"  onclick="toggleMenu(this)">
-		<div class="wsdk-menu-version">
-			<i class="icon-info-circle"></i> {$module->displayName} {$module->version}
-		</div>
-		<div class="wsdk-menu-collapse-arrow">
-			<i class="material-icons rtl-flip">chevron_left</i>
-			<i class="material-icons rtl-flip">chevron_left</i>
-		</div>		
-	</div>
-	{foreach from=$menuItems item=group key=group_key} 
-		<div id="{$group_key}" class="list-group wsdk-panel-menu">
-		{foreach from=$group item=item key=item_key}
-			{if !isset($item.is_show) OR (isset($item.is_show) AND $item.is_show)}
-				<div id="{$item_key}" class="list-group-item{if isset($item.class)} {$item.class}{/if}">
-					<a class="{if !empty($item.active) OR ($item_key == $active_section)}active{/if}" href="{if isset($item.link)}{$item.link}{else}#{/if}">
+<div class="wsdk-menu {$active_section}{if $sidebarOrientation == 'horizontal'} wsdk-menu--horizontal{/if}">
+
+        {foreach from=$menuItems item=group key=group_key}
+                <div id="{$group_key}" class="list-group wsdk-panel-menu{if $sidebarOrientation == 'horizontal'} wsdk-panel-menu--horizontal{/if}">
+                {foreach from=$group item=item key=item_key}
+                        {if !isset($item.is_show) OR (isset($item.is_show) AND $item.is_show)}
+                                <div id="{$item_key}" class="list-group-item{if isset($item.class)} {$item.class}{/if}">
+                                        <a class="{if !empty($item.active) OR ($item_key == $active_section)}active{/if}" href="{if isset($item.link)}{$item.link}{else}#{/if}">
 						<i class="{if isset($item.icon) }{$item.icon}{else}icon-caret-right{/if}"></i>
 						<span>{$item.title}</span>
 
@@ -56,6 +50,27 @@
 
 		</div>
 
-	{/foreach}
-	</div>
+        {/foreach}
+
+        {if $sidebarOrientation != 'horizontal'}
+        <div class="wsdk-menu-collapse"  onclick="toggleMenu(this)">
+                <div class="wsdk-menu-version">
+                        <i class="icon-info-circle"></i> {$module->displayName} {$module->version}
+                </div>
+                <div class="wsdk-menu-collapse-arrow">
+                        <i class="material-icons rtl-flip">chevron_left</i>
+                        <i class="material-icons rtl-flip">chevron_left</i>
+                </div>
+        </div>
+        {/if}
+
+        {if isset($sidebar_toggle_template) && $sidebar_toggle_template}
+            {include file=$sidebar_toggle_template
+                sidebar_orientation=$sidebarOrientation
+                toggle_label=$sidebar_toggle_label|default:null
+                switch_to_horizontal_label=$sidebar_toggle_switch_to_horizontal_label|default:null
+                switch_to_vertical_label=$sidebar_toggle_switch_to_vertical_label|default:null
+            }
+        {/if}
+        </div>
 {/if}

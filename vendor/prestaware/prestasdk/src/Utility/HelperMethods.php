@@ -7,7 +7,7 @@
  * @website    https://prestaware.com
  * @license    https://www.gnu.org/licenses/gpl-3.0.html [GNU General Public License]
  */
-namespace PrestaSDK\V040\Utility;
+namespace PrestaSDK\V071\Utility;
 
 class HelperMethods
 {
@@ -102,5 +102,81 @@ class HelperMethods
         }
 
         return array_keys($array) !== range(0, count($array) - 1);
+    }
+
+    /**
+     * Generate admin link for cart view
+     *
+     * @param int $id_cart Cart ID
+     * @return string Cart admin link
+     */
+    public static function getCartLinkAdmin($id_cart)
+    {
+        if (empty($id_cart)) {
+            return '';
+        }
+
+        $context = \Context::getContext();
+        $link = $context->link;
+
+        $viewLink = $link->getAdminLink('AdminCarts', true, [], [
+            'viewcart' => '',
+            'id_cart' => $id_cart
+        ]);
+
+        // For PrestaShop 1.7.7+ use Symfony routing
+        if (\Tools::version_compare(_PS_VERSION_, '1.7.7', '>=')) {
+            global $kernel;
+            if ($kernel instanceof \Symfony\Component\HttpKernel\HttpKernelInterface) {
+                try {
+                    $sfRouter = $kernel->getContainer()->get('router');
+                    $viewLink = $sfRouter->generate('admin_carts_view', [
+                        'cartId' => $id_cart
+                    ]);
+                } catch (\Exception $e) {
+                    // Fallback to legacy link if Symfony routing fails
+                }
+            }
+        }
+
+        return $viewLink;
+    }
+
+    /**
+     * Generate admin link for order view
+     *
+     * @param int $id_order Order ID
+     * @return string Order admin link
+     */
+    public static function getOrderLinkAdmin($id_order)
+    {
+        if (empty($id_order)) {
+            return '';
+        }
+
+        $context = \Context::getContext();
+        $link = $context->link;
+
+        $viewLink = $link->getAdminLink('AdminOrders', true, [], [
+            'vieworder' => '',
+            'id_order' => $id_order
+        ]);
+
+        // For PrestaShop 1.7.7+ use Symfony routing
+        if (\Tools::version_compare(_PS_VERSION_, '1.7.7', '>=')) {
+            global $kernel;
+            if ($kernel instanceof \Symfony\Component\HttpKernel\HttpKernelInterface) {
+                try {
+                    $sfRouter = $kernel->getContainer()->get('router');
+                    $viewLink = $sfRouter->generate('admin_orders_view', [
+                        'orderId' => $id_order
+                    ]);
+                } catch (\Exception $e) {
+                    // Fallback to legacy link if Symfony routing fails
+                }
+            }
+        }
+
+        return $viewLink;
     }
 }

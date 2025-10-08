@@ -10,7 +10,7 @@
     "require": {
         "php": ">=8.1.0",
         "morilog/jalali": "3.*",
-        "prestaware/prestasdk": "^0.4.0"
+        "prestaware/prestasdk": "^0.7.1"
     },
     "autoload": {
         "psr-4": {

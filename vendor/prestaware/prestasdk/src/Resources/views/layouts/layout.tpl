@@ -7,24 +7,26 @@
  * @license    https://www.gnu.org/licenses/gpl-3.0.html [GNU General Public License]
  *}
 
+{assign var='sidebarOrientation' value=$sidebar_orientation|default:'horizontal'}
+
 {if isset($_positions.Header)}
 	<div id="wsdk-panel-header">
 		{$_positions.Header}
 	</div>
 {/if}
 
-<div id="wsdk-panel">
-	{if isset($_positions.TopContainer)}
-		{$_positions.TopContainer}
-	{/if}
+<div id="wsdk-panel"{if $sidebarOrientation == 'horizontal'} class="wsdk-panel--horizontal"{/if}>
+        {if isset($_positions.TopContainer)}
+                {$_positions.TopContainer}
+        {/if}
 
-	<div class="wsdk-panel-content">
-		{if isset($_positions.Sidebar)}
-			<div class="wsdk-panel-sidebar">
-				{include file="../_partials/info.tpl"}
-				{$_positions.Sidebar}
-			</div>
-		{/if}
+        <div class="wsdk-panel-content{if $sidebarOrientation == 'horizontal'} wsdk-panel-content--horizontal{/if}">
+                {if isset($_positions.Sidebar)}
+                        <div class="wsdk-panel-sidebar{if $sidebarOrientation == 'horizontal'} wsdk-panel-sidebar--horizontal{/if}">
+                                {include file="../_partials/info.tpl"}
+                                {$_positions.Sidebar}
+                        </div>
+                {/if}
 
 		<div class="wsdk-panel-main">
 			{if isset($_positions.TopContent)}

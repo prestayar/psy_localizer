@@ -9,14 +9,24 @@
  */
 declare(strict_types=1);
 
-namespace PrestaSDK\V040\Controller;
+namespace PrestaSDK\V071\Controller;
 
-use PrestaSDK\V040\Utility\AssetPublisher;
-use PrestaSDK\V040\Utility\VersionHelper;
+use PrestaSDK\V071\Utility\AssetPublisher;
+use PrestaSDK\V071\Utility\PanelCore as PanelCoreTrait;
+use PrestaSDK\V071\Utility\VersionHelper;
 
 abstract class AdminController extends \ModuleAdminController
 {
-    use \PrestaSDK\V040\Utility\PanelCore;
+    use PanelCoreTrait {
+        PanelCoreTrait::initSDKPanel as protected traitInitSDKPanel;
+    }
+
+    /**
+     * Cached orientation that will be injected into templates.
+     *
+     * @var string|null
+     */
+    protected $resolvedSidebarOrientation = null;
 
     public $model = null;
 
@@ -79,22 +89,70 @@ abstract class AdminController extends \ModuleAdminController
         return $this->renderPanelTemplate('layouts/' . $this->panelLayout);
     }
 
+    public function initSDKPanel()
+    {
+        $this->pushPanelVar('sidebar_orientation', $this->getSidebarOrientation());
+
+        $this->traitInitSDKPanel();
+    }
+
     public function initSidebarPanel()
     {
+        $orientation = $this->getSidebarOrientation();
+
+        $toggleTemplatePath = $this->getPanelTemplatePath('_partials/sidebar-orientation-toggle.tpl');
+        if (!is_file($toggleTemplatePath)) {
+            $toggleTemplatePath = null;
+        }
+
         $sidebarVars = [
-            'menuItems' => $this->getmenuItems(),
+            'menuItems' => $this->getMenuItems(),
             'active_section' => $this->module->getRequestSection(),
             'module' => $this->module,
-            'controller' => \Tools::getValue('controller')
+            'controller' => \Tools::getValue('controller'),
+            'sidebar_orientation' => $orientation,
+            'sidebar_toggle_label' => $this->module->l('Switch menu layout', 'admincontroller'),
+            'sidebar_toggle_switch_to_horizontal_label' => $this->module->l('Switch to horizontal menu', 'admincontroller'),
+            'sidebar_toggle_switch_to_vertical_label' => $this->module->l('Switch to vertical menu', 'admincontroller'),
+            'sidebar_toggle_template' => $toggleTemplatePath,
         ];
 
         $sideMenu = $this->renderPanelTemplate('_partials/sidebar.tpl', $sidebarVars);
         $this->appendToPanel('Sidebar', $sideMenu);
     }
 
-    public function getmenuItems()
+    public function getMenuItems()
     {
         return [];
+    }
+
+    public function setSidebarOrientation(string $orientation): void
+    {
+        $this->resolvedSidebarOrientation = $this->normalizeSidebarOrientation($orientation);
+    }
+
+    protected function getSidebarOrientation(): string
+    {
+        if ($this->resolvedSidebarOrientation !== null) {
+            return $this->resolvedSidebarOrientation;
+        }
+
+        if (property_exists($this, 'sidebarOrientation')) {
+            $this->resolvedSidebarOrientation = $this->normalizeSidebarOrientation($this->sidebarOrientation);
+
+            return $this->resolvedSidebarOrientation;
+        }
+
+        $this->resolvedSidebarOrientation = 'horizontal';
+
+        return $this->resolvedSidebarOrientation;
+    }
+
+    protected function normalizeSidebarOrientation($orientation): string
+    {
+        $orientation = strtolower(trim((string) $orientation));
+
+        return in_array($orientation, ['horizontal', 'vertical'], true) ? $orientation : 'horizontal';
     }
 
     public function setMedia($isNewTheme = false)
@@ -121,8 +179,8 @@ abstract class AdminController extends \ModuleAdminController
         }
 
         // Add CSS and JS files with versioning
-        $this->context->controller->addCSS(_MODULE_DIR_ . $this->module->name . '/views/css/prestasdk.css?v=' . $sdkVersion);
-        $this->context->controller->addJS(_MODULE_DIR_ . $this->module->name . '/views/js/prestasdk.js?v=' . $sdkVersion);
+        $this->addCSS($this->module->getPathUri() . 'views/css/prestasdk.css');
+        $this->addJS($this->module->getPathUri() . 'views/js/prestasdk.js?v=' . $sdkVersion);
     }
 
     public function getRenderList()

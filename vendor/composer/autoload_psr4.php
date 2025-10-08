@@ -13,7 +13,7 @@ return array(
     'Symfony\\Component\\Clock\\' => array($vendorDir . '/symfony/clock'),
     'Psr\\Clock\\' => array($vendorDir . '/psr/clock/src'),
     'PrestaYar\\Localizer\\' => array($baseDir . '/src'),
-    'PrestaSDK\\V040\\' => array($vendorDir . '/prestaware/prestasdk/src'),
+    'PrestaSDK\\V071\\' => array($vendorDir . '/prestaware/prestasdk/src'),
     'Morilog\\Jalali\\' => array($vendorDir . '/morilog/jalali/src'),
     'Carbon\\Doctrine\\' => array($vendorDir . '/carbonphp/carbon-doctrine-types/src/Carbon/Doctrine'),
     'Carbon\\' => array($vendorDir . '/nesbot/carbon/src/Carbon'),

@@ -29,7 +29,7 @@ class ComposerStaticInit16b3614bf584c7ae4cee985a0bc2ee97
         array (
             'Psr\\Clock\\' => 10,
             'PrestaYar\\Localizer\\' => 20,
-            'PrestaSDK\\V040\\' => 15,
+            'PrestaSDK\\V071\\' => 15,
         ),
         'M' => 
         array (
@@ -75,7 +75,7 @@ class ComposerStaticInit16b3614bf584c7ae4cee985a0bc2ee97
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
-        'PrestaSDK\\V040\\' => 
+        'PrestaSDK\\V071\\' => 
         array (
             0 => __DIR__ . '/..' . '/prestaware/prestasdk/src',
         ),

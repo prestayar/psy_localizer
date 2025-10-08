@@ -7,7 +7,7 @@
  * @website    https://prestaware.com
  * @license    https://www.gnu.org/licenses/gpl-3.0.html [GNU General Public License]
  */
-namespace PrestaSDK\V040\Utility;
+namespace PrestaSDK\V071\Utility;
 
 class HelperForm extends \HelperForm
 {
@@ -73,20 +73,70 @@ class HelperForm extends \HelperForm
             $this->submit_action = 'submit' . $this->module->name;
         }
 
+        $this->languages = \Context::getContext()->controller->_languages;
+
         return $this;
     }
 
     /**
      * set Fields Value By Array of Fields
      *
-     * @param $fields
+     * @param array $fieldsArray
+     * @param array $multilingualFields Array of field names that are multilingual
      * @return object
      */
-    public function setFieldsByArray(array $fieldsArray)
+    public function setFieldsByArray(array $fieldsArray, array $multilingualFields = [])
     {
         if (!empty($fieldsArray)) {
             foreach ($fieldsArray as $field) {
-                $this->fields_value[$field] = \Configuration::get($field);
+                if (in_array($field, $multilingualFields)) {
+                    // Handle multilingual field
+                    $this->setMultilingualField($field);
+                } else {
+                    // Handle regular field
+                    $this->fields_value[$field] = \Configuration::get($field);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set multilingual field values for all languages
+     *
+     * @param string $fieldName
+     * @param mixed $defaultValue Default value if configuration is empty
+     * @return $this
+     */
+    public function setMultilingualField($fieldName, $defaultValue = '')
+    {
+        $languages = \Language::getLanguages(false);
+        $this->fields_value[$fieldName] = array();
+        
+        foreach ($languages as $language) {
+            $value = \Configuration::get($fieldName, $language['id_lang']);
+            $this->fields_value[$fieldName][$language['id_lang']] = $value ?: $defaultValue;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set multiple multilingual fields at once
+     *
+     * @param array $multilingualFields Array of field names with optional default values
+     * @return $this
+     */
+    public function setMultilingualFields(array $multilingualFields)
+    {
+        foreach ($multilingualFields as $fieldName => $defaultValue) {
+            if (is_int($fieldName)) {
+                // If no default value provided, use field name as key
+                $this->setMultilingualField($defaultValue);
+            } else {
+                // Use provided default value
+                $this->setMultilingualField($fieldName, $defaultValue);
             }
         }
 
