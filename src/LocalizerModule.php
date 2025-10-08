@@ -126,6 +126,17 @@ class LocalizerModule extends PrestaSDKModule
         if ($this->getFromConfigs('TinyMCE')) {
             $this->context->controller->addCSS($this->getPathUri() . 'views/libs/prism/prism.css');
             $this->context->controller->addJS($this->getPathUri() . 'views/libs/prism/prism.js', 'all');
+
+            // Build the path to file manager
+            $fileManagerUrl = $this->context->shop->getBaseURL(true) . basename(_PS_ADMIN_DIR_) . '/filemanager/dialog.php';
+
+            // Add necessary parameters with a valid token
+            $fileManagerUrl .= '?popup=1&field_id=my_field_id'; // field_id can be anything
+            $fileManagerUrl .= '&token=' . \Tools::getAdminTokenLite('AdminLegacyLayout'); // Get a generic valid token
+
+            \Media::addJsDef([
+                'psy_localizer_filemanager_url' => $fileManagerUrl
+            ]);            
         }
     }
 

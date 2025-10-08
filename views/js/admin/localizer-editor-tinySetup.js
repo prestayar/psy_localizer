@@ -94,16 +94,7 @@ function tinyConfiguration(configuration) {
         quickbars_selection_toolbar: 'bold quicklink | forecolor backcolor  | h2 h3 blockquote fontsizeselect',
         //quickbars_image_toolbar: 'alignleft aligncenter alignright | rotateleft rotateright | imageoptions',
         contextmenu: 'undo redo | abbr anchor emoticons edit_attributes | help',
-        external_plugins: {
-            "filemanager":  localizer_moduleUrl + "views/libs/filemanager/plugin.min.js",
-        },
-
-        /* Filemanager plugin start */
-        filemanager_title:"مدیریت فایل ها" ,
-        filemanager_crossdomain: true,
-        external_filemanager_path: localizer_moduleUrl + "views/libs/filemanager/",
-        /* Filemanager plugin end */
-        /**/
+        external_plugins: {},
 
         content_css: [
             //localizer_editor_skin_tinymce
@@ -347,6 +338,31 @@ function tinyConfiguration(configuration) {
             {text: 'SQL', value: 'sql'},
             {text: 'HTTP', value: 'http'},
         ],
+
+        file_picker_callback: function(callback, value, meta) {
+            let finalUrl = psy_localizer_filemanager_url;
+
+            if (meta.filetype === 'image') {
+                finalUrl += '&type=1'; 
+            } else if (meta.filetype === 'media') {
+                finalUrl += '&type=3'; 
+            } else { 
+                finalUrl += '&type=2'; 
+            }
+
+            tinymce.activeEditor.windowManager.openUrl({
+                url: psy_localizer_filemanager_url, 
+                title: 'مدیریت فایل پرستاشاپ',
+                width: 900,
+                height: 450,
+                onMessage: function (api, data) {
+                    if (data.mceAction === 'fileSelected') {
+                        callback(data.url);
+                        api.close();
+                    }
+                }
+            });
+        },
 
         /* Remove CDATA in scripts */
         init_instance_callback : function(editor) {
