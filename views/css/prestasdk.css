@@ -40,7 +40,7 @@
 	text-transform: lowercase;
 	text-transform: full-size-kana;
 	background: #f4f4f4;
-	margin:-20px -20px 20px;
+	/* margin:-20px -20px 20px; */
 }
 #wsdk-panel .panel .panel-heading i {
 	font-size: 18px;
@@ -255,6 +255,7 @@
         border: none;
         padding: 0;
         color: #464646 !important;
+        text-decoration: none !important;
 }
 
 .wsdk-panel-sidebar--horizontal a#wsdk-info:hover {
@@ -301,6 +302,7 @@
 .wsdk-panel-sidebar--horizontal .wsdk-panel-menu--horizontal .list-group-item a {
         padding: 6px 12px;
         border-radius: 4px;
+        text-decoration: none !important;
 }
 
 .wsdk-panel-sidebar--horizontal .wsdk-panel-menu--horizontal .list-group-item a:hover,
@@ -426,7 +428,6 @@ a#wsdk-info:hover {
 	font-size: .825rem;
 }
 .wsdk-info__name .badge {
-    padding: 0 .25rem;
     font-size: .525rem;
 }
 .wsdk-info__name .badge.badge-info {
