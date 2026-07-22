@@ -19,11 +19,25 @@ use PrestaYar\Localizer\Api\Service\ProductInfoManager;
 class LocalizerAdmin extends AdminController
 {
     /**
+     * @var string
+     */
+    protected $translationClass;
+
+    /**
      * @var ProductInfoManager
      */
     private $productInfoManager;    
 
     protected $sidebarOrientation = 'horizontal';
+
+    /**
+     * Initialize the controller
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->translationClass = self::class;
+    }
     
     public function getmenuItems()
     {
@@ -92,7 +106,7 @@ class LocalizerAdmin extends AdminController
                 $this->pushPanelVar('status_update', 'success');
             } else {
                 $this->pushPanelVar('status_update', 'warning');
-                $this->pushPanelVar('tooltip_message', $this->l('A new version of the module has been released, please update!'));
+                $this->pushPanelVar('tooltip_message', $this->module->l('A new version of the module has been released, please update!', $this->translationClass));
             }
         }
     }    

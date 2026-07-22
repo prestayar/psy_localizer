@@ -24,6 +24,8 @@ class AdminLocalizerPanelController extends LocalizerAdmin
         parent::__construct();
         // Show the module overview when no section is requested.
         $this->module->sectionDefault = 'dashboard';
+
+        $this->translationClass = self::class;
     }
 
 	/*
@@ -71,9 +73,9 @@ class AdminLocalizerPanelController extends LocalizerAdmin
         if (Tools::isSubmit('submit' . $this->module->name)) {
             Config::updateConfigs($simpleConfigs, true, true);
             if (empty($this->errors)) {
-                $output .= $this->module->displayConfirmation($this->l('All settings have been updated successfully!', 'adminlocalizerpanelcontroller'));
+                $output .= $this->module->displayConfirmation($this->module->l('All settings have been updated successfully!', $this->translationClass));
             } else {
-                $output .= $this->module->displayWarning($this->l('Except for the warnings and errors above, all other settings have been updated!', 'adminlocalizerpanelcontroller'));
+                $output .= $this->module->displayWarning($this->module->l('Except for the warnings and errors above, all other settings have been updated!', $this->translationClass));
             }
 
             if ($this->getFromConfigs('Native_Active')) {
@@ -83,13 +85,13 @@ class AdminLocalizerPanelController extends LocalizerAdmin
             if (Tools::getValue('Localizer_FixCurrency')) {
                 $result = NativeCorePrestashop::fixCurrency();
                 if ($result === true) {
-                    $output .= $this->module->displayConfirmation($this->module->l('Currency corrected, clear the cache once to apply the changes.', 'adminlocalizerpanelcontroller'));
+                    $output .= $this->module->displayConfirmation($this->module->l('Currency corrected, clear the cache once to apply the changes.', $this->translationClass));
                 } else if ($result === -10) {
-                    $output .= $this->module->displayError($this->module->l('Persian language is not available in your store, it is not possible to modify the currency.', 'adminlocalizerpanelcontroller'));
+                    $output .= $this->module->displayError($this->module->l('Persian language is not available in your store, it is not possible to modify the currency.', $this->translationClass));
                 } else if ($result === -11) {
-                    $output .= $this->module->displayError($this->module->l('Error correcting Toman currency.', 'adminlocalizerpanelcontroller'));
+                    $output .= $this->module->displayError($this->module->l('Error correcting Toman currency.', $this->translationClass));
                 } else if ($result === -12) {
-                    $output .= $this->module->displayError($this->module->l('Error adding Toman currency.', 'adminlocalizerpanelcontroller'));
+                    $output .= $this->module->displayError($this->module->l('Error adding Toman currency.', $this->translationClass));
                 }
             }
 
@@ -98,9 +100,9 @@ class AdminLocalizerPanelController extends LocalizerAdmin
 
                 if (empty($result)) {
                     \Configuration::updateValue('Localizer_BackofficeFont', false);
-                    $output .= $this->module->displayError($this->module->l('Error, the selected font files are not available or it is not possible to edit the css file of the fonts.', 'adminlocalizerpanelcontroller'));
+                    $output .= $this->module->displayError($this->module->l('Error, the selected font files are not available or it is not possible to edit the css file of the fonts.', $this->translationClass));
                 } else {
-                    $output .= $this->module->displayConfirmation($this->module->l('Admin font changed. Please clear the browser using Ctrl+f5.', 'adminlocalizerpanelcontroller'));
+                    $output .= $this->module->displayConfirmation($this->module->l('Admin font changed. Please clear the browser using Ctrl+f5.', $this->translationClass));
                 }
             }
 
@@ -109,26 +111,26 @@ class AdminLocalizerPanelController extends LocalizerAdmin
         // Init Fields form array
         $fields_form[0]['form'] = [
             'legend' => [
-                'title' => $this->module->l('Native Setting', 'adminlocalizerpanelcontroller'),
+                'title' => $this->module->l('Native Setting', $this->translationClass),
             ],
             'input' => [
                 [
                     'type' => 'switch',
                     'name' => 'Localizer_Native_Active',
-                    'label' => $this->module->l('Native Active', 'adminlocalizerpanelcontroller'),
+                    'label' => $this->module->l('Native Active', $this->translationClass),
                 ], [
                     'type' => 'switch',
                     'name' => 'Localizer_JalaliDate',
-                    'label' => $this->module->l('Jalali Date', 'adminlocalizerpanelcontroller'),
-                    'desc' => $this->module->l('This option changes the PrestaShop date to a glorious date.', 'adminlocalizerpanelcontroller'),
+                    'label' => $this->module->l('Jalali Date', $this->translationClass),
+                    'desc' => $this->module->l('This option changes the PrestaShop date to a glorious date.', $this->translationClass),
                 ], [
                     'type' => 'switch',
                     'name' => 'Localizer_TinyMCE',
-                    'label' => $this->module->l('Advanced text editor', 'adminlocalizerpanelcontroller'),
-                    'desc' => $this->module->l('To modify the settings of the text editor and add more options to it', 'adminlocalizerpanelcontroller'),
+                    'label' => $this->module->l('Advanced text editor', $this->translationClass),
+                    'desc' => $this->module->l('To modify the settings of the text editor and add more options to it', $this->translationClass),
                 ], [
                     'type' => 'select',
-                    'label' => $this->module->l('Backoffice font', 'adminlocalizerpanelcontroller'),
+                    'label' => $this->module->l('Backoffice font', $this->translationClass),
                     'name' => 'Localizer_BackofficeFont',
                     'options' => [
                         'optiongroup' => [
@@ -142,23 +144,23 @@ class AdminLocalizerPanelController extends LocalizerAdmin
                         ],
                         'default' => [
                             'value' => 0,
-                            'label' => $this->module->l('Use defualt fonts', 'adminlocalizerpanelcontroller')
+                            'label' => $this->module->l('Use defualt fonts', $this->translationClass)
                         ],
                     ],
-                    'desc' => $this->module->l('Specifies the font type of the admin area, after changing the font to apply the page, reload with ctrl + f5.', 'adminlocalizerpanelcontroller'),
+                    'desc' => $this->module->l('Specifies the font type of the admin area, after changing the font to apply the page, reload with ctrl + f5.', $this->translationClass),
                 ], [
                     'type' => 'switch',
                     'name' => 'Localizer_FixCurrency',
-                    'label' => $this->module->l('Modify and add currency', 'adminlocalizerpanelcontroller'),
+                    'label' => $this->module->l('Modify and add currency', $this->translationClass),
                     'desc' => [
-                        $this->module->l('The Toman currency is added to the store and if there is a name, it is modified.', 'adminlocalizerpanelcontroller'),
-                        $this->module->l('The price display format for the currency of Toman and Rial is modified.', 'adminlocalizerpanelcontroller'),
-                        $this->module->l('This option is always disabled, you only need to activate it once when you need to modify the currency.', 'adminlocalizerpanelcontroller'),
+                        $this->module->l('The Toman currency is added to the store and if there is a name, it is modified.', $this->translationClass),
+                        $this->module->l('The price display format for the currency of Toman and Rial is modified.', $this->translationClass),
+                        $this->module->l('This option is always disabled, you only need to activate it once when you need to modify the currency.', $this->translationClass),
                     ]
                 ],
             ],
             'submit' => [
-                'title' => $this->module->l('Save', 'adminlocalizerpanelcontroller'),
+                'title' => $this->module->l('Save', $this->translationClass),
                 'class' => 'btn btn-default pull-right'
             ]
         ];
@@ -194,7 +196,7 @@ class AdminLocalizerPanelController extends LocalizerAdmin
         }
         if (!empty($main)) {
             $list[] = [
-                'name' => $this->module->l('Localizer fonts', 'adminlocalizerpanelcontroller'),
+                'name' => $this->module->l('Localizer fonts', $this->translationClass),
                 'query'=> $main
             ];
         }
