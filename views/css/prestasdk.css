@@ -492,7 +492,7 @@ input[type="text"].ltr {
 
 .wsdk-header-toggle-wrapper {
         position: absolute;
-        top: 0px;
+        top: 60px;
         right: 16px;
         z-index: 1050;
         display: flex;
@@ -545,12 +545,12 @@ body.wsdk-hide-page-head .page-bar {
 }
 
 body.wsdk-hide-page-head #content.bootstrap {
-        padding-top: 40px !important;
+        padding-top: 70px !important;
 }
 
 body.wsdk-hide-page-head .wsdk-header-toggle-wrapper {
         position: fixed;
-        top: 40px;
+        top: 60px;
         right: 12px;
 }
 
