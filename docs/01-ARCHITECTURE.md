@@ -23,6 +23,10 @@
 
 `LocalizerGetCartForViewingHandler` Handler نمایش سبد را از طریق QueryBus جایگزین می‌کند. منطق اصلی هسته ابتدا اجرا می‌شود و ماژول فقط تاریخ ثبت‌نام مشتری، ثبت سفارش، ایجاد و ویرایش سبد را در `CartView` بازنویسی می‌کند.
 
+## ویرایشگر TinyMCE در Back Office
+
+وقتی قابلیت TinyMCE فعال باشد، `LocalizerModule::hookActionAdminControllerSetMedia()` فایل‌های TinyMCE هسته را از صف assetهای Back Office حذف می‌کند و runtime نسخهٔ 5 ماژول را پیش از adapter `localizer-editor-tinySetup.js` اضافه می‌کند. این مسیر به patch کردن فایل‌های JavaScript هسته وابسته نیست و فقط برای زبان فارسی، به‌جز `AdminTranslations`، فعال می‌شود.
+
 ## دارایی‌های رابط کاربری
 
 Dashboard از `views/css/wsdk_dashboard.css` و `views/js/wsdk_dashboard.js` استفاده می‌کند. اسکریپت عمومی پنل نیز در `views/js/admin/main.js` قرار دارد.
