@@ -1,23 +1,11 @@
-window.tinyMCEPreInit = {};
-window.tinyMCEPreInit.base = localizer_moduleUrl + 'views/libs/tinymce';
-window.tinyMCEPreInit.suffix = '.min';
-$('head').append($('<script>').attr('type', 'text/javascript').attr('src', localizer_moduleUrl + 'views/libs/tinymce/tinymce.min.js'));
-
 $(document).ready(function(){
-    tinySetup(null);
-    tinymce.remove();
-    displayTinyMCE();
-    /*$(this).ajaxComplete(function(ev, jqXHR, settings) {
-        if (!is_prestashop_default_controller && settings.url.toLowerCase().indexOf("notifications") == -1) {
-            tinySetup(null);
-            tinymce.remove();
-            displayTinyMCE();
-        }
-    });*/
+    tinySetup({editor_selector: 'autoload_rte'});
 });
 
 function tinySetup(config){
-    return true;
+    config = config || {};
+
+    displayTinyMCE(config.editor_selector || 'autoload_rte', config);
 }
 function tinyConfiguration(configuration) {
     if (typeof tinymce === 'undefined') {
@@ -395,49 +383,50 @@ function tinyConfiguration(configuration) {
         if (configuration[index] === undefined)
             configuration[index] = el;
     });
-    setTimeout(function() {
-        //tinymce.overrideDefaults(configuration);
-        tinymce.init(configuration);
-    }, 10);
+    tinymce.init(configuration);
 }
-function displayTinyMCE(selector = null) {
-    // Selectors
-    if (selector === null) {
-        selector = 'localizer_tiny5';
-        $('textarea').each(function(index, textarea){
-            if ($('textarea[id="'+textarea.id+'"]').hasClass('autoload_rte') &&
-                !$('textarea[id="'+textarea.id+'"]').hasClass(selector)) {
-                $('textarea[id="'+textarea.id+'"]').removeClass('autoload_rte').addClass(selector);
-            }
-        });
-    }
+function displayTinyMCE(selector = null, configuration = {}) {
+    selector = selector || 'autoload_rte';
 
-    // Display editor
-    tinyConfiguration({
-        editor_selector : selector,
-        setup : function(ed) {
-            ed.on('LoadContent', function(ed) {
-                // Fix modal windows visual issues with elements.
-                $('.tox-tinymce-aux').attr('style', 'z-index: 9999 !important;position: relative;');
+    $('.' + selector).each(function(index, textarea) {
+        var editor = tinymce.get(textarea.id);
 
-                handleCounterTiny(tinymce.activeEditor.id);
-            });
-            ed.on('change', function(ed, e) {
-                tinymce.triggerSave();
-                handleCounterTiny(tinymce.activeEditor.id);
-            });
-            ed.on('blur', function(ed) {
-                tinymce.triggerSave();
-            });
-            // Default values
-            ed.on('init', function (e)
-            {
-                tinymce.activeEditor.getDoc().body.style.fontSize = default_font_size;
-                tinymce.activeEditor.getDoc().body.style.fontFamily = default_font;
-                handleCounterTiny(tinymce.activeEditor.id);
-            });
+        if (editor) {
+            editor.remove();
         }
     });
+
+    // Display editor
+    var originalSetup = configuration.setup;
+    configuration.editor_selector = selector;
+    configuration.setup = function(ed) {
+        ed.on('LoadContent', function(ed) {
+            // Fix modal windows visual issues with elements.
+            $('.tox-tinymce-aux').attr('style', 'z-index: 9999 !important;position: relative;');
+
+            handleCounterTiny(tinymce.activeEditor.id);
+        });
+        ed.on('change', function(ed, e) {
+            tinymce.triggerSave();
+            handleCounterTiny(tinymce.activeEditor.id);
+        });
+        ed.on('blur', function(ed) {
+            tinymce.triggerSave();
+        });
+        // Default values
+        ed.on('init', function (e)
+        {
+            tinymce.activeEditor.getDoc().body.style.fontSize = default_font_size;
+            tinymce.activeEditor.getDoc().body.style.fontFamily = default_font;
+            handleCounterTiny(tinymce.activeEditor.id);
+        });
+
+        if (typeof originalSetup === 'function') {
+            originalSetup(ed);
+        }
+    };
+
+    tinyConfiguration(configuration);
 }
 function handleCounterTiny(id) {
     let textarea = $('#'+id);

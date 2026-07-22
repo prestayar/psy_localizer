@@ -21,7 +21,7 @@ class Psy_Localizer extends LocalizerModule
     {
         $this->name = 'psy_localizer';
         $this->tab = 'administration';
-        $this->version = '1.0.1';
+        $this->version = '1.0.2';
         
         $this->author = 'PrestaYar.com';
         $this->displayName = $this->l('Prestashop localizer');

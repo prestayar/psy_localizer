@@ -85,33 +85,6 @@ class LocalizerModule extends PrestaSDKModule
                 $this->context->controller->addJS($this->getPathUri() . 'views/js/admin/main.js', 'all');
             }
 
-            $controller = \Tools::getValue('controller');
-            if ($this->getFromConfigs('TinyMCE') && $controller != 'AdminTranslations') {
-
-                \Media::addJsDef(
-                    array(
-                        'Localizer_TinyMCE' => true,
-                        'localizer_editor_skin_tinymce' => $this->getPathUri() . 'views/css/admin/localizer-editor-skin.css',
-                        'localizer_moduleUrl' => $this->getModuleUrl(),
-                        'localizer_editor_iso' => $this->context->language->iso_code,
-                        'localizer_directionality' => !empty($this->context->language->is_rtl)? 'rtl' : 'ltr',
-                        'localizer_base_url' => $this->getPsBaseUrl(),
-
-                        'extra_plugins' => "codemirror abbr edit_attributes",
-                        'extra_plugins_toolbar' => "",
-
-                        'default_font' => "arial,helvetica,sans-serif",
-                        'default_font_size' => "15px",
-
-                        //'is_prestashop_default_controller' => false,
-                        'word_limit' => $this->l("The maximum characters have been reached!")
-                    )
-                );
-
-                $this->context->controller->addJs($this->getPathUri() . 'views/js/admin/localizer-editor-tinySetup.js');
-            }
-
-
         }
 
         if ($this->context->language->is_rtl) {
@@ -123,21 +96,58 @@ class LocalizerModule extends PrestaSDKModule
             $this->context->controller->addCSS($this->getPathUri() . '/views/css/admin/localizer-fix-rtl.css');
         }
 
-        if ($this->getFromConfigs('TinyMCE')) {
-            $this->context->controller->addCSS($this->getPathUri() . 'views/libs/prism/prism.css');
-            $this->context->controller->addJS($this->getPathUri() . 'views/libs/prism/prism.js', 'all');
+    }
 
-            // Build the path to file manager
-            $fileManagerUrl = $this->context->shop->getBaseURL(true) . basename(_PS_ADMIN_DIR_) . '/filemanager/dialog.php';
-
-            // Add necessary parameters with a valid token
-            $fileManagerUrl .= '?popup=1&field_id=my_field_id'; // field_id can be anything
-            $fileManagerUrl .= '&token=' . \Tools::getAdminTokenLite('AdminLegacyLayout'); // Get a generic valid token
-
-            \Media::addJsDef([
-                'psy_localizer_filemanager_url' => $fileManagerUrl
-            ]);            
+    public function hookActionAdminControllerSetMedia()
+    {
+        if (
+            !$this->getFromConfigs('Native_Active')
+            || !$this->getFromConfigs('TinyMCE')
+            || $this->context->language->iso_code !== 'fa'
+            || \Tools::getValue('controller') === 'AdminTranslations'
+        ) {
+            return;
         }
+
+        $coreTinyMceFiles = array_map(
+            static function (string $path): string {
+                return strtok(\Media::getJSPath($path), '?');
+            },
+            [
+                _PS_JS_DIR_ . 'tiny_mce/tiny_mce.js',
+                _PS_JS_DIR_ . 'admin/tinymce.inc.js',
+            ]
+        );
+        $this->context->controller->js_files = array_values(array_filter(
+            $this->context->controller->js_files,
+            static function (string $path) use ($coreTinyMceFiles): bool {
+                return !in_array(strtok($path, '?'), $coreTinyMceFiles, true);
+            }
+        ));
+
+        $fileManagerUrl = $this->context->shop->getBaseURL(true) . basename(_PS_ADMIN_DIR_) . '/filemanager/dialog.php';
+        $fileManagerUrl .= '?popup=1&field_id=my_field_id';
+        $fileManagerUrl .= '&token=' . \Tools::getAdminTokenLite('AdminLegacyLayout');
+
+        \Media::addJsDef([
+            'Localizer_TinyMCE' => true,
+            'localizer_editor_skin_tinymce' => $this->getPathUri() . 'views/css/admin/localizer-editor-skin.css',
+            'localizer_moduleUrl' => $this->getModuleUrl(),
+            'localizer_editor_iso' => $this->context->language->iso_code,
+            'localizer_directionality' => !empty($this->context->language->is_rtl) ? 'rtl' : 'ltr',
+            'localizer_base_url' => $this->getPsBaseUrl(),
+            'extra_plugins' => 'codemirror abbr edit_attributes',
+            'extra_plugins_toolbar' => '',
+            'default_font' => 'arial,helvetica,sans-serif',
+            'default_font_size' => '15px',
+            'word_limit' => $this->l('The maximum characters have been reached!'),
+            'psy_localizer_filemanager_url' => $fileManagerUrl,
+        ]);
+
+        $this->context->controller->addCSS($this->getPathUri() . 'views/libs/prism/prism.css');
+        $this->context->controller->addJS($this->getPathUri() . 'views/libs/prism/prism.js');
+        $this->context->controller->addJS($this->getPathUri() . 'views/libs/tinymce/tinymce.min.js');
+        $this->context->controller->addJS($this->getPathUri() . 'views/js/admin/localizer-editor-tinySetup.js');
     }
 
     public function hookDashboardZoneOne()

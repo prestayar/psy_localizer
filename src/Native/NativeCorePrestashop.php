@@ -25,38 +25,7 @@ class NativeCorePrestashop
      */
     public static function getCoreChanges(): array
     {
-        return [
-            // To display Jalali date in Twig
-            [
-                'title' => 'جهت اعمال تاریخ جلالی',
-                'path' => 'src/PrestaShopBundle/Twig/Extension/LocalizationExtension.php',
-                'replaces' => [
-                    'return $date->format($this->dateFormatFull);' => 'return \Tools::displayDate($date->format(\'Y-m-d H:i:s\'), true); #localizer#',
-                    'return $date->format($this->dateFormatLight);' => 'return \Tools::displayDate($date->format(\'Y-m-d\')); #localizer#',
-                ]
-            ],
-            // To activate the advanced text editor
-            [
-                'title' => 'جهت فعال سازی ویرایشگر متن پیشرفته',
-                'path' => 'js/tiny_mce/tiny_mce.js',
-                'replaces' => [
-                    "var path_array = baseAdminDir.split('/');" =>
-                        "if (typeof Localizer_TinyMCE == 'undefined') { var path_array = baseAdminDir.split('/'); // #localizer#",
-                    "$.getScript(final_path+'/js/tiny_mce/tinymce.min.js');" =>
-                        "$.getScript(final_path+'/js/tiny_mce/tinymce.min.js');}// #localizer# change psy_localizer",
-                ]
-            ],
-            [
-                'title' => 'جهت فعال سازی ویرایشگر متن پیشرفته',
-                'path' => 'js/admin/tinymce.inc.js',
-                'replaces' => [
-                    "function tinySetup(config) {" =>
-                        "if (typeof Localizer_TinyMCE == 'undefined') { function tinySetup(config) { // #localizer#",
-                    "tinyMCE.init(config);" =>
-                        "tinyMCE.init(config);}// #localizer# change psy_localizer",
-                ]
-            ]
-        ];
+        return [];
     }
 
     /**
