@@ -27,7 +27,7 @@ class Psy_Localizer extends LocalizerModule
         $this->displayName = $this->l('Prestashop localizer');
         $this->description = $this->l('A comprehensive localization solution for PrestaShop specifically designed for the Persian language and Iranian market.');
         
-        $this->ps_versions_compliancy = ['min' => '8.1.0', 'max' => _PS_VERSION_];
+        $this->ps_versions_compliancy = ['min' => '9.1.0', 'max' => _PS_VERSION_];
 
         // Module Tab GrandParent 
         $this->moduleGrandParentTab = 'CONFIGURE';
