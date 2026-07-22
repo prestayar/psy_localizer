@@ -10,20 +10,51 @@
 use PrestaSDK\V071\Utility\Config;
 use PrestaSDK\V071\Utility\HelperForm;
 use PrestaYar\Localizer\LocalizerAdmin;
+use PrestaYar\Localizer\Dashboard\DashboardFactory;
 use PrestaYar\Localizer\Native\NativeCorePrestashop;
 use PrestaYar\Localizer\Native\StyleSheetFont;
 
 class AdminLocalizerPanelController extends LocalizerAdmin
 {
+    /**
+     * Initialize the controller
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        // Show the module overview when no section is requested.
+        $this->module->sectionDefault = 'dashboard';
+    }
+
 	/*
 	|--------------------------------------------------------------------------
 	| Controller Action Tabs
 	|--------------------------------------------------------------------------
 	*/
 
-    public function sectionIndex()
+    public function sectionDashboard(): string
     {
-        Tools::redirectAdmin($this->module->getModuleAdminLink($this->module->configsAdminController, 'configure'));
+        $productInfo = $this->getProductInfoManager()->getModuleInfo();
+        if (!empty($productInfo['errors'])) {
+            $this->errors[] = $productInfo['errors'][0]['message'];
+        }
+        $productInfo = $productInfo['data'] ?? [];
+        $builder = DashboardFactory::create($this->module, $this->context, $productInfo);
+
+        return $builder->render();
+    }
+
+    /**
+     * Refresh section - clears cache and refreshes module information
+     */
+    public function sectionRefresh(): void
+    {
+        // Clear the cache to force a fresh API call.
+        $this->getProductInfoManager()->refreshModuleInfo();
+
+        // Redirect back to the dashboard.
+        $dashboardUrl = $this->module->getModuleAdminLink('AdminLocalizerPanel', ['section' => 'dashboard']);
+        Tools::redirectAdmin($dashboardUrl);
     }
 
     public function sectionConfigure() 
