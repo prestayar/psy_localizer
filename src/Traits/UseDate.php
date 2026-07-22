@@ -24,7 +24,7 @@ trait UseDate
      * @return mixed|string
      * @throws \PrestaShopException
      */
-    public function displayDate($date, bool $full = false): mixed
+    public function displayDate($date, $full = false): mixed
     {
         if (!$date || !($time = strtotime($date))) {
             return $date;
