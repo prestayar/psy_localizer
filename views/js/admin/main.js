@@ -65,8 +65,8 @@ function initdatePickers() {
                     enabled: false
                 };
 
-            var $valueDefualt = $(picker).attr('value');
-            if ($valueDefualt && $valueDefualt !== '0000-00-00') {
+            var $valueDefault = $(picker).attr('value');
+            if ($valueDefault && $valueDefault !== '0000-00-00') {
                 $initialValue = true;
             }
 
