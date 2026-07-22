@@ -118,9 +118,9 @@ class LocalizerModule extends PrestaSDKModule
             clearstatcache();
 
             if (!empty($this->getFromConfigs('BackofficeFont'))) {
-                $this->context->controller->addCss($this->getPathUri() . '/views/css/admin/localizer-font.css');
+                $this->context->controller->addCSS($this->getPathUri() . '/views/css/admin/localizer-font.css');
             }
-            $this->context->controller->addCss($this->getPathUri() . '/views/css/admin/localizer-fix-rtl.css');
+            $this->context->controller->addCSS($this->getPathUri() . '/views/css/admin/localizer-fix-rtl.css');
         }
 
         if ($this->getFromConfigs('TinyMCE')) {

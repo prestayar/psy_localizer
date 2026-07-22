@@ -23,3 +23,31 @@
 div.code-toolbar, div.code-toolbar * {
     direction: ltr !important;
 }
+
+/*  prestashop 9 */
+.content-div,
+#content.bootstrap {
+  padding-right: calc(var(--cdk-sidebar-width) + var(--cdk-size-16)) !important;
+  padding-left: var(--cdk-size-16) !important;
+}
+.page-sidebar-closed:not(.mobile) #content {
+  padding-right: calc(var(--cdk-sidebar-width-collapse) + var(--cdk-size-16)) !important;
+}
+.page-sidebar-closed:not(.mobile) .content-div {
+  padding-right: calc(var(--cdk-sidebar-width-collapse) + var(--cdk-size-16)) !important;
+}
+
+.ps-switch .slide-button::after {
+  right: auto;
+  left: .125rem;
+  left: var(--cdk-size-2);
+}
+
+
+
+
+.bootstrap .page-head {
+  padding-right:var(--cdk-sidebar-width);
+  padding-left: 0;
+  transition: padding-left var(--cdk-default-transition-duration);
+}
