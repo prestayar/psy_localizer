@@ -10,7 +10,7 @@
  */
 namespace PrestaYar\Localizer\Api\Service;
 
-use PrestaSDK\V070\Utility\CacheManager;
+use PrestaSDK\V071\Utility\CacheManager;
 use PrestaYar\Localizer\Api\Config\ApiConfig;
 
 if (!defined('_PS_VERSION_')) {

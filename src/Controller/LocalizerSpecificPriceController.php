@@ -11,40 +11,49 @@ declare(strict_types=1);
 
 namespace PrestaYar\Localizer\Controller;
 
-use PrestaShopBundle\Controller\Admin\SpecificPriceController;
+use PrestaShopBundle\Controller\Admin\Sell\Catalog\Product\SpecificPriceController;
 use SpecificPrice;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class LocalizerSpecificPriceController extends SpecificPriceController
 {
-    public function listAction($idProduct)
+    public function listAction(Request $request, int $productId): JsonResponse
     {
-        $translator = $this->get('translator');
-        $response = parent::listAction($idProduct);
+        $response = parent::listAction($request, $productId);
+        $data = $response->getData(true);
 
         $localizer = \Module::getInstanceByName('psy_localizer');
+        if (!is_array($data) || !isset($data['specificPrices']) || !is_array($data['specificPrices']) || !$localizer) {
+            return $response;
+        }
 
-        $data = json_decode($response->getContent(), true);
-        foreach ($data as &$item) {
-            $specific_price = new SpecificPrice($item['id_specific_price']);
+        foreach ($data['specificPrices'] as &$item) {
+            if (!is_array($item) || empty($item['id'])) {
+                continue;
+            }
 
-            if ($specific_price->from == '0000-00-00 00:00:00' && $specific_price->to == '0000-00-00 00:00:00') {
-                $period = $translator->trans('Unlimited', [], 'Admin.Global');
+            $specificPrice = new SpecificPrice((int) $item['id']);
+
+            if ($specificPrice->from === '0000-00-00 00:00:00' && $specificPrice->to === '0000-00-00 00:00:00') {
+                $period = $this->trans('Unlimited', [], 'Admin.Global');
             } else {
                 $period = '';
-                if ($specific_price->from != '0000-00-00 00:00:00') {
-                    $period .= $translator->trans('From', [], 'Admin.Global') . ' ';
-                    $period .= $localizer->getJalaliDate($specific_price->from);
+                if ($specificPrice->from !== '0000-00-00 00:00:00') {
+                    $period .= $this->trans('From', [], 'Admin.Global') . ' ';
+                    $period .= $localizer->getJalaliDate($specificPrice->from);
                 }
 
-                if ($specific_price->to != '0000-00-00 00:00:00') {
+                if ($specificPrice->to !== '0000-00-00 00:00:00') {
                     $period .= '<br />';
-                    $period .= $translator->trans('to', [], 'Admin.Global') . ' ';
-                    $period .= $localizer->getJalaliDate($specific_price->to);
+                    $period .= $this->trans('to', [], 'Admin.Global') . ' ';
+                    $period .= $localizer->getJalaliDate($specificPrice->to);
                 }
             }
 
             $item['period'] = $period;
         }
+        unset($item);
 
         $response->setData($data);
 

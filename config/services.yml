@@ -1,5 +1,4 @@
 services:
   prestayar_localizer_controller_localizerspecificprice:
     class: PrestaYar\Localizer\Controller\LocalizerSpecificPriceController
-    decorates: PrestaShopBundle\Controller\Admin\SpecificPriceController
-    arguments: ['@prestayar_localizer_controller_localizerspecificprice.inner']    
+    decorates: PrestaShopBundle\Controller\Admin\Sell\Catalog\Product\SpecificPriceController
