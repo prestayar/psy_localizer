@@ -11,9 +11,17 @@
 - `DashboardFactory` با اجزای Dashboard در `PrestaSDK V071` نمای سلامت و checklist پیکربندی را می‌سازد.
 - بخش `refresh` cache اطلاعات ماژول را پاک می‌کند و کاربر را به داشبورد بازمی‌گرداند.
 
+## نمایش تاریخ در Twig
+
+`LocalizerLocalizationExtension`، Service مربوط به `LocalizationExtension` هسته را decorate می‌کند. فیلتر `date_format_full` تاریخ را به `Tools::displayDate()` می‌سپارد تا تنظیم تاریخ کامل زبان کاربر و تبدیل جلالی ماژول اعمال شود.
+
 ## سازگاری قیمت‌های خاص
 
 `LocalizerSpecificPriceController` Controller قیمت‌های خاص PrestaShop 9 را decorate می‌کند. خروجی endpoint فهرست قیمت‌ها پس از دریافت از Controller هسته، با بازهٔ تاریخ جلالی تکمیل می‌شود.
+
+## نمایش جزئیات سبد
+
+`LocalizerGetCartForViewingHandler` Handler نمایش سبد را از طریق QueryBus جایگزین می‌کند. منطق اصلی هسته ابتدا اجرا می‌شود و ماژول فقط تاریخ ثبت‌نام مشتری، ثبت سفارش، ایجاد و ویرایش سبد را در `CartView` بازنویسی می‌کند.
 
 ## دارایی‌های رابط کاربری
 
