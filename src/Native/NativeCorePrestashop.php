@@ -35,16 +35,6 @@ class NativeCorePrestashop
                     'return $date->format($this->dateFormatLight);' => 'return \Tools::displayDate($date->format(\'Y-m-d\')); #localizer#',
                 ]
             ],
-            [
-                'title' => 'جهت اعمال تاریخ جلالی',
-                'path' => 'src/Adapter/Cart/QueryHandler/GetCartForViewingHandler.php',
-                'replaces' => [
-                    '(new DateTime($customer->date_add))->format($context->language->date_format_lite),' => '\Tools::displayDate($customer->date_add), #localizer#',
-                    '(new DateTime($order->date_add))->format($context->language->date_format_lite),' => '\Tools::displayDate($order->date_add), #localizer#',
-
-                ]
-            ],
-
             // To activate the advanced text editor
             [
                 'title' => 'جهت فعال سازی ویرایشگر متن پیشرفته',

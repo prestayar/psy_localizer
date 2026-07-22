@@ -1,4 +1,25 @@
 services:
+  PrestaYar\Localizer\Twig\Extension\LocalizerLocalizationExtension:
+    decorates: PrestaShopBundle\Twig\Extension\LocalizationExtension
+    autowire: true
+    autoconfigure: true
+
+  prestayar_localizer.inner.get_cart_for_viewing_handler:
+    class: PrestaShop\PrestaShop\Adapter\Cart\QueryHandler\GetCartForViewingHandler
+    arguments:
+      - '@PrestaShop\PrestaShop\Adapter\ImageManager'
+      - '@prestashop.core.localization.locale.context_locale'
+    autoconfigure: false
+
+  prestashop.adapter.query_handler.get_cart_for_viewing_handler:
+    class: PrestaYar\Localizer\Cart\QueryHandler\LocalizerGetCartForViewingHandler
+    arguments:
+      - '@prestayar_localizer.inner.get_cart_for_viewing_handler'
+    public: true
+    autoconfigure: false
+    tags:
+      - { name: messenger.message_handler, method: handle, handles: PrestaShop\PrestaShop\Core\Domain\Cart\Query\GetCartForViewing }
+
   prestayar_localizer_controller_localizerspecificprice:
     class: PrestaYar\Localizer\Controller\LocalizerSpecificPriceController
     decorates: PrestaShopBundle\Controller\Admin\Sell\Catalog\Product\SpecificPriceController
