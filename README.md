@@ -2,6 +2,8 @@
 
 A comprehensive localization solution for PrestaShop specifically designed for the Persian language and Iranian market.
 
+Compatible with PrestaShop 9.x.
+
 ## Overview
 
 PrestaShop Localizer (psy_localizer) is a module that adapts PrestaShop for Persian-speaking users and the Iranian market. It provides various localization features to enhance the user experience for both customers and store administrators.
@@ -16,9 +18,16 @@ PrestaShop Localizer (psy_localizer) is a module that adapts PrestaShop for Pers
 - **Character Conversion**: Converts Arabic letters to Persian equivalents
 - **Number Conversion**: Converts English and Arabic numerals to Persian numerals
 
+## Compatibility
+
+| Version | Support |
+|---------|---------|
+| PrestaShop 9.x | ✅ Supported |
+| PrestaShop 8.x | ❌ Not supported |
+
 ## Requirements
 
-- PrestaShop 8.1.0 or higher
+- PrestaShop 9.1.0 or higher
 - PHP 8.1 or higher
 
 ## Installation
@@ -86,4 +95,4 @@ For support, bug reports, or feature requests, please contact:
 
 ## License
 This module is released under the GNU General Public License v3.0 (GPL-3.0) .
-Copyright © 2025 PrestaYar Team
+Copyright © 2025-2026 PrestaYar Team
