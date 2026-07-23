@@ -78,14 +78,10 @@ class AdminLocalizerPanelController extends LocalizerAdmin
                 $output .= $this->module->displayWarning($this->module->l('Except for the warnings and errors above, all other settings have been updated!', $this->translationClass));
             }
 
-            if ($this->getFromConfigs('Native_Active')) {
-                NativeCorePrestashop::changeFiles();
-            }
-
             if (Tools::getValue('Localizer_FixCurrency')) {
                 $result = NativeCorePrestashop::fixCurrency();
                 if ($result === true) {
-                    $output .= $this->module->displayConfirmation($this->module->l('Currency corrected, clear the cache once to apply the changes.', $this->translationClass));
+                    $output .= $this->module->displayConfirmation($this->module->l('Currency updated successfully.', $this->translationClass));
                 } else if ($result === -10) {
                     $output .= $this->module->displayError($this->module->l('Persian language is not available in your store, it is not possible to modify the currency.', $this->translationClass));
                 } else if ($result === -11) {
@@ -154,7 +150,6 @@ class AdminLocalizerPanelController extends LocalizerAdmin
                     'label' => $this->module->l('Modify and add currency', $this->translationClass),
                     'desc' => [
                         $this->module->l('The Toman currency is added to the store and if there is a name, it is modified.', $this->translationClass),
-                        $this->module->l('The price display format for the currency of Toman and Rial is modified.', $this->translationClass),
                         $this->module->l('This option is always disabled, you only need to activate it once when you need to modify the currency.', $this->translationClass),
                     ]
                 ],
@@ -169,14 +164,6 @@ class AdminLocalizerPanelController extends LocalizerAdmin
 
         $simpleConfigs[] = 'Localizer_FixCurrency';
         $helper->setFieldsByArray($simpleConfigs);
-
-        if (empty(NativeCorePrestashop::checkFiles())) {
-            $output .= $this->module->renderModuleTemplate('admin/message-native.tpl', [
-                'filesCore' => NativeCorePrestashop::getCoreChanges(),
-                'changeFilesDone' => false,
-                'date_test' => date('Y-m-d H:i:s'),
-            ], true);
-        }
 
         return $output . $helper->generateForm($fields_form);
     }

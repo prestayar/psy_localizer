@@ -18,88 +18,12 @@ use PrestaShop\PrestaShop\Core\Grid\Record\RecordCollection;
 
 class NativeCorePrestashop
 {
-    /**
-     * The list of changes that must be applied to the core for Prestashop localization.
-     *
-     * @return array[]
-     */
-    public static function getCoreChanges(): array
-    {
-        return [];
-    }
-
-    /**
-     * Make changes to core files
-     *
-     * @return bool
-     */
-    public static function changeFiles(): bool
-    {
-        $files = self::getCoreChanges();
-        foreach ($files as $file) {
-            $filePath = _PS_ROOT_DIR_ . '/' . $file['path'];
-
-            if (!file_exists($filePath)) {
-                continue;
-            }
-
-            $fileData = self::fileRead($filePath);
-            if (strpos($fileData, "#manager#")) {
-                continue;
-            }
-
-            if (strpos($fileData, "#localizer#")) {
-                continue;
-            }
-
-            if (!file_exists($filePath.'.backup')) {
-                self::fileWriter($filePath.'.backup', $fileData);
-            }
-
-            foreach ($file['replaces'] as $old => $new) {
-                $fileData = str_replace($old, $new, $fileData);
-            }
-
-            self::fileWriter($filePath, $fileData);
-        }
-
-        return true;
-    }
-
-    /**
-     * Checking the changes in the core
-     *
-     * @return bool
-     */
-    public static function checkFiles(): bool
-    {
-        $files = self::getCoreChanges();
-        foreach ($files as $file) {
-            $filePath = _PS_ROOT_DIR_ . '/' . $file['path'];
-            if (!file_exists($filePath)) {
-                return false;
-            }
-
-            $fileOpen = fopen($filePath, 'r');
-            $fileData = fread($fileOpen,filesize($filePath));
-            fclose($fileOpen);
-
-            if (!strpos($fileData, "#manager#") && !strpos($fileData, "#localizer#")) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     public static function fixCurrency(): bool|int
     {
         $lang_id = \Language::getIdByIso('fa');
         if (empty($lang_id)) {
             return -10;
         }
-
-        self::editXmlForDisplayFormat();
 
         $currencyId = \Currency::getIdByIsoCode('IRT');
         if (!empty($currencyId)) {
@@ -142,66 +66,7 @@ class NativeCorePrestashop
         return true;
     }
 
-    public static function editXmlForDisplayFormat(): bool
-    {
-        if (!function_exists('simplexml_load_file')) {
-            return false;
-        }
-
-        $xmlPath = _PS_ROOT_DIR_. '/localization/CLDR/core/common/main/fa.xml';
-        if (file_exists($xmlPath)) {
-            $this->generateBackUpFile($xmlPath);
-            $xml = simplexml_load_file($xmlPath);
-
-            // Currency Display Format
-            $selector = '//ldml/numbers/currencyFormats[@numberSystem="arab"]/currencyFormatLength/currencyFormat[@type="standard"]';
-
-            if ($xml->xpath($selector)[0]->pattern) {
-                $xml->xpath($selector)[0]->pattern = '#,##0.00 ¤';
-            }
-
-            // Currency Display Format
-            $selector = '//ldml/numbers/currencyFormats[@numberSystem="arabext"]/currencyFormatLength/currencyFormat[@type="standard"]';
-
-            if ($xml->xpath($selector)[0]->pattern) {
-                $xml->xpath($selector)[0]->pattern = '#,##0.00 ¤';
-            }
-
-            $xml->asXML($xmlPath);
-        }
-
-        return true;
-    }
-
-    public function generateBackUpFile($filePath): bool
-    {
-        if (!file_exists($filePath.'.backup')) {
-            $fileContent = $this->fileRead($filePath);
-            $this->fileWriter($filePath.'.backup', $fileContent);
-        }
-
-        return true;
-    }
-
-    public static function fileWriter($filePath, $fileData): bool
-    {
-        $fileOpen = fopen($filePath, 'w+');
-        fwrite($fileOpen, $fileData);
-        fclose($fileOpen);
-
-        return true;
-    }
-
-    public static function fileRead($filePath): bool|string
-    {
-        $fileOpen = fopen($filePath, 'r');
-        $fileContent = fread($fileOpen, filesize($filePath));
-        fclose($fileOpen);
-
-        return $fileContent;
-    }
-
-        /**
+    /**
      * Convert date for save in the database
      * @param $object
      */

@@ -150,23 +150,6 @@ class LocalizerModule extends PrestaSDKModule
         $this->context->controller->addJS($this->getPathUri() . 'views/js/admin/localizer-editor-tinySetup.js');
     }
 
-    public function hookDashboardZoneOne()
-    {
-        if (!$this->getFromConfigs('Native_Active')) {
-            return false;
-        }
-
-        if (!NativeCorePrestashop::checkFiles()) {
-            $this->updatePosition(\Hook::getIdByName('dashboardZoneOne'),0,1);
-            return $this->renderModuleTemplate('admin/message-dashboard.tpl', [
-                'changeFileOK' => false,
-                'nativeLink' => $this->getModuleAdminLink($this->configsAdminController, 'native')
-            ], true);
-        }
-
-        return false;
-    }
-
     public function hookActionAdminLoginControllerSetMedia()
     {
         if (!$this->getFromConfigs('Native_Active')) {
