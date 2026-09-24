@@ -11,6 +11,8 @@
 ## Twig Extension
 
 - `LocalizerLocalizationExtension::dateFormatFull(DateTimeInterface|string $date): string` — فیلتر `date_format_full` را با فرمت زبان کاربر و مسیر نمایش تاریخ ماژول ارائه می‌کند.
+- `UseDate::displayDate($date, $full = false): mixed` — تاریخ را با تنظیم زبان جاری نمایش می‌دهد؛ ورودی عددی به‌عنوان Unix timestamp تفسیر می‌شود.
+- `UseDate::displayDateCustom($date, string $format = 'd F Y', bool $gregorian = false): mixed` — تاریخ را با فرمت دلخواه و تقویم انتخاب‌شده نمایش می‌دهد.
 
 ## Factory داشبورد
 

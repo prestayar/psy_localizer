@@ -15,6 +15,8 @@
 
 `LocalizerLocalizationExtension`، Service مربوط به `LocalizationExtension` هسته را decorate می‌کند. فیلتر `date_format_full` تاریخ را به `Tools::displayDate()` می‌سپارد تا تنظیم تاریخ کامل زبان کاربر و تبدیل جلالی ماژول اعمال شود.
 
+Trait `UseDate` ورودی عددی `displayDate()` را به‌عنوان Unix timestamp تفسیر می‌کند و سپس همان مسیر نمایش تاریخ را اجرا می‌کند.
+
 ## سازگاری قیمت‌های خاص
 
 `LocalizerSpecificPriceController` Controller قیمت‌های خاص PrestaShop 9 را decorate می‌کند. خروجی endpoint فهرست قیمت‌ها پس از دریافت از Controller هسته، با بازهٔ تاریخ جلالی تکمیل می‌شود.
@@ -22,6 +24,12 @@
 ## نمایش جزئیات سبد
 
 `LocalizerGetCartForViewingHandler` Handler نمایش سبد را از طریق QueryBus جایگزین می‌کند. منطق اصلی هسته ابتدا اجرا می‌شود و ماژول فقط تاریخ ثبت‌نام مشتری، ثبت سفارش، ایجاد و ویرایش سبد را در `CartView` بازنویسی می‌کند.
+
+Service مربوط به Handler داخلی با `autowire` ساخته می‌شود تا وابستگی‌های سازنده با نسخهٔ هسته هماهنگ بمانند؛ Locale زمینه به‌صورت صریح به Service همان زبان جاری متصل است.
+
+## نرمال‌سازی متن جست‌وجو
+
+Override مربوط به `Tools::replaceAccentedChars()` متن‌های حروف عربی و فارسی را از transliteration هسته جدا نگه می‌دارد و بخش‌های دیگر متن را به پیاده‌سازی هسته می‌سپارد. این کار باعث می‌شود متن فارسی در ایندکس و جست‌وجو به لاتین تبدیل نشود.
 
 ## ویرایشگر TinyMCE در Back Office
 
