@@ -25,10 +25,12 @@ div.code-toolbar, div.code-toolbar * {
 }
 
 /*  prestashop 9 */
-.content-div,
-#content.bootstrap {
-  padding-right: calc(var(--cdk-sidebar-width) + var(--cdk-size-16)) !important;
-  padding-left: var(--cdk-size-16) !important;
+@media (min-width: 992px) {
+  .content-div,
+  #content.bootstrap {
+    padding-right: calc(var(--cdk-sidebar-width) + var(--cdk-size-16)) !important;
+    padding-left: var(--cdk-size-16) !important;
+  }
 }
 .page-sidebar-closed:not(.mobile) #content {
   padding-right: calc(var(--cdk-sidebar-width-collapse) + var(--cdk-size-16)) !important;
