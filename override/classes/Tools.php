@@ -2,6 +2,34 @@
 
 class Tools extends ToolsCore
 {
+    /**
+     * Keep Persian and Arabic text intact while normalizing non-Arabic text.
+     *
+     * ICU transliteration converts Persian words to Latin equivalents. This
+     * breaks Persian search indexing because indexed and searched values can
+     * be normalized differently by the core.
+     *
+     * @param string $str
+     *
+     * @return string
+     */
+    public static function replaceAccentedChars($str)
+    {
+        $parts = preg_split('/(\p{Arabic}+)/u', (string) $str, -1, PREG_SPLIT_DELIM_CAPTURE);
+
+        if ($parts === false) {
+            return parent::replaceAccentedChars($str);
+        }
+
+        foreach ($parts as $index => $part) {
+            if ($index % 2 === 0) {
+                $parts[$index] = parent::replaceAccentedChars($part);
+            }
+        }
+
+        return implode('', $parts);
+    }
+
     public static function displayDate($date, $full = false)
     {
         if (Module::isEnabled('psy_localizer')) {
