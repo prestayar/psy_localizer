@@ -26,7 +26,15 @@ trait UseDate
      */
     public function displayDate($date, $full = false): mixed
     {
-        if (!$date || !($time = strtotime($date))) {
+        if (!$date) {
+            return $date;
+        }
+
+        if (is_numeric($date)) {
+            $date = date('Y-m-d H:i:s', (int) $date);
+        }
+
+        if (!($time = strtotime($date))) {
             return $date;
         }
 
