@@ -49,7 +49,7 @@ class LocalizerAdmin extends AdminController
                     'icon' => 'icon-gear',
                 ],
                 'document' => [
-                    'title' => $this->module->l('document', 'localizeradmin'),
+                    'title' => $this->module->l('Document', 'localizeradmin'),
                     'link' => $this->module->getModuleAdminLink($this->module->configsAdminController, 'document'),
                     'icon' => 'icon-support',
                 ]

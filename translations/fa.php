@@ -31,6 +31,7 @@ $_MODULE['<{psy_localizer}prestashop>adminlocalizerpanelcontroller_c9cc8cce247e4
 $_MODULE['<{psy_localizer}prestashop>adminlocalizerpanelcontroller_7352b7524bad96983b8676dd512b573e'] = 'فونت های بومی ساز';
 $_MODULE['<{psy_localizer}prestashop>localizeradmin_f1206f9fadc5ce41694f69129aecac26'] = 'تنظیمات';
 $_MODULE['<{psy_localizer}prestashop>localizeradmin_6a26f548831e6a8c26bfbbd9f6ec61e0'] = 'راهنما';
+$_MODULE['<{psy_localizer}prestashop>localizeradmin_0945359809dad1fbf3dea1c95a0da951'] = 'مستندات';
 $_MODULE['<{psy_localizer}prestashop>localizeradmin_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'فعال';
 $_MODULE['<{psy_localizer}prestashop>localizeradmin_b9f5c797ebbf55adccdd8539a65a0241'] = 'غیرفعال';
 $_MODULE['<{psy_localizer}prestashop>prestasdkmodule_90d333127fb8f6fe4d6c99f2059ebc16'] = '٪ S فعال است!';
