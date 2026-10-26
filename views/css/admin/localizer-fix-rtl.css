@@ -53,3 +53,11 @@ div.code-toolbar, div.code-toolbar * {
   padding-left: 0;
   transition: padding-left var(--cdk-default-transition-duration);
 }
+
+/* PrestaShop 9 RTL switch state fix */
+.ps-switch input:last-of-type:checked ~ .slide-button::after {
+  left: 2px !important;
+  right: auto !important;
+  transform: none !important;
+  -webkit-transform: none !important;
+}
