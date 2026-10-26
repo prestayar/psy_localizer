@@ -97,7 +97,35 @@ class LocalizerAdmin extends AdminController
     private function initInfoModule(): void
     {
         // Set module information for SDK panel
-        $moduleInfo = $this->getProductInfoManager()->getModuleInfo();
+        set_error_handler(static function (int $severity, string $message, string $file, int $line): bool {
+            if (!(error_reporting() & $severity)) {
+                return false;
+            }
+
+            throw new \ErrorException($message, 0, $severity, $file, $line);
+        });
+
+        try {
+            $moduleInfo = $this->getProductInfoManager()->getModuleInfo();
+        } catch (\Throwable $e) {
+            $moduleInfo = [
+                'data' => null,
+                'errors' => [
+                    [
+                        'type' => 'api_error',
+                        'message' => $e->getMessage(),
+                        'code' => 'API_REQUEST_FAILED',
+                    ],
+                ],
+            ];
+        } finally {
+            restore_error_handler();
+        }
+
+        // Apply visibility after reading the cache so debug errors never leak into production.
+        if (!defined('_PS_MODE_DEV_') || !_PS_MODE_DEV_) {
+            $moduleInfo['errors'] = [];
+        }
 
         $this->pushPanelVar('module_info', $moduleInfo);   
         

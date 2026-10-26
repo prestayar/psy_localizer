@@ -58,13 +58,26 @@ class ProductInfoManager
      */
     public function getModuleInfo(): array
     {
-        return $this->cacheManager->remember(
-            ApiConfig::CACHE_KEY_MODULE_INFO,
-            ApiConfig::CACHE_TTL,
-            function () {
-                return $this->fetchModuleInfoFromApi();
-            }
-        );
+        try {
+            return $this->cacheManager->remember(
+                ApiConfig::CACHE_KEY_MODULE_INFO,
+                ApiConfig::CACHE_TTL,
+                function () {
+                    return $this->fetchModuleInfoFromApi();
+                }
+            );
+        } catch (\Throwable $e) {
+            return [
+                'data' => null,
+                'errors' => [
+                    [
+                        'type' => 'api_error',
+                        'message' => $e->getMessage(),
+                        'code' => 'API_REQUEST_FAILED',
+                    ],
+                ],
+            ];
+        }
     }
 
     /**
@@ -74,30 +87,15 @@ class ProductInfoManager
      */
     private function fetchModuleInfoFromApi(): array
     {
-        try {
-            // Fetch product info from API
-            $response = $this->apiService->fetchProductInfo(
-                $this->domain,
-                $this->productId
-            );
+        $response = $this->apiService->fetchProductInfo(
+            $this->domain,
+            $this->productId
+        );
 
-            return [
-                'data' => $this->normalizeApiResponse($response),
-                'errors' => []
-            ];
-            
-        } catch (\Exception $e) {
-            return [
-                'data' => null,
-                'errors' => [
-                    [
-                        'type' => 'api_error',
-                        'message' => $e->getMessage(),
-                        'code' => 'API_REQUEST_FAILED'
-                    ]
-                ]
-            ];
-        }
+        return [
+            'data' => $this->normalizeApiResponse($response),
+            'errors' => [],
+        ];
     }    
 
     /**
