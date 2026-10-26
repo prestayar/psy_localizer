@@ -204,6 +204,11 @@ class LocalizerModule extends PrestaSDKModule
         $params['data'] = $this->getDataModifiedRecords($params['data']);
     }
 
+    public function hookActionCartGridDataModifier($params)
+    {
+        $params['data'] = $this->getDataModifiedRecords($params['data']);
+    }
+
     public function isNewTheme(): bool
     {
         return \Tools::getIsset('_token');
