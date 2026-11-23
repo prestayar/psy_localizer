@@ -209,6 +209,60 @@ class LocalizerModule extends PrestaSDKModule
         $params['data'] = $this->getDataModifiedRecords($params['data']);
     }
 
+    /**
+     * Work around the PrestaShop 9.2.1 ProductController bug that corrupts UTF-8 feature values.
+     * Its newline regex omits the Unicode flag, so a byte in a Persian character (for example U+0645)
+     * can be replaced as a newline. This makes structured_data fail JSON encoding.
+     * Recheck ProductControllerCore::addProductFeaturesToStructuredData() when updating PrestaShop support.
+     * Remove this hook and its registration once all supported core versions include the Unicode fix.
+     */
+    public function hookActionFrontControllerSetVariables(array $params): void
+    {
+        $controller = $this->context->controller;
+        $properties = $params['templateVars']['structured_data']['product']['additionalProperty'] ?? null;
+        if (!$controller instanceof \ProductControllerCore || !is_array($properties)) {
+            return;
+        }
+
+        if (json_encode($properties) !== false || json_last_error() !== JSON_ERROR_UTF8) {
+            return;
+        }
+
+        $replacements = [];
+        foreach ($controller->getTemplateVarProduct()['grouped_features'] as $feature) {
+            if (!isset($feature['name'], $feature['value'])) {
+                continue;
+            }
+
+            $name = trim((string) $feature['name']);
+            $value = trim((string) $feature['value']);
+
+            // Match the bytes produced by the core bug before replacing the value.
+            $broken = preg_replace('/\R+/', ', ', $value);
+            $fixed = preg_replace('/\R+/u', ', ', $value);
+            if ($broken !== null && $fixed !== null && preg_match('//u', $broken) === false) {
+                $replacements[$name][$broken] = $fixed;
+            }
+        }
+
+        $properties = &$params['templateVars']['structured_data']['product']['additionalProperty'];
+        foreach ($properties as $index => $property) {
+            if (
+                !is_array($property)
+                || ($property['@type'] ?? null) !== 'PropertyValue'
+                || !is_string($property['name'] ?? null)
+                || !is_string($property['value'] ?? null)
+            ) {
+                continue;
+            }
+
+            $replacement = $replacements[$property['name']][$property['value']] ?? null;
+            if ($replacement !== null) {
+                $properties[$index]['value'] = $replacement;
+            }
+        }
+    }
+
     public function isNewTheme(): bool
     {
         return \Tools::getIsset('_token');
